@@ -2,7 +2,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class Bj_신기한소수 {
+public class BJ_신기한소수 {
 
 
     public static void main(String[] args) {
