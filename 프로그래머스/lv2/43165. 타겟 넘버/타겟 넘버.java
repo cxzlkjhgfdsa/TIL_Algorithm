@@ -6,8 +6,7 @@ class Solution {
         answer = 0;
         targetNum = target;
         size = numbers.length;
-        dfs(1, numbers[0], numbers);
-        dfs(1, numbers[0]*-1, numbers);
+        dfs(0, 0, numbers);
         return answer;
     }
     public void dfs(int cnt, int sum, int[] arr){
