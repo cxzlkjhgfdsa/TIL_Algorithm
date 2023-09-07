@@ -1,11 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
-
-    static int[] parents;
-
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input[];
@@ -15,12 +12,9 @@ public class Main {
         int N = Integer.parseInt(input[0]);
         int M = Integer.parseInt(input[1]);
 
-        int maxCost = 0;
-
-        Edge[] edges = new Edge[M];
-        parents = new int[N+1];
+        ArrayList<Edge>[] graph = new ArrayList[N+1];
         for(int i=1; i<=N; i++){
-            parents[i] = i;
+            graph[i] = new ArrayList<>();
         }
 
         for(int i=0; i<M; i++){
@@ -29,21 +23,31 @@ public class Main {
             int b = Integer.parseInt(input[1]);
             int cost = Integer.parseInt(input[2]);
 
-            edges[i] = new Edge(a, b, cost);
+            graph[a].add(new Edge(b, cost));
+            graph[b].add(new Edge(a, cost));
         }
 
-        Arrays.sort(edges, (e1, e2) -> (e1.cost - e2.cost));
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
 
         int totalCost = 0;
+        int maxCost = 0;
 
-        for(int i=0; i<M; i++){
-            Edge e = edges[i];
+        boolean[] visited = new boolean[N+1];
 
-            if(find(e.a) != find(e.b)){
-                union(e.a, e.b);
-                totalCost += e.cost;
+        pq.add(new Edge(1, 0));
 
-                maxCost = Math.max(e.cost, maxCost);
+        while(!pq.isEmpty()){
+            Edge e = pq.poll();
+            if(visited[e.p])
+                continue;
+            totalCost += e.cost;
+            maxCost = Math.max(maxCost, e.cost);
+            visited[e.p] = true;
+
+            for(Edge next : graph[e.p]){
+                if(visited[next.p])
+                    continue;
+                pq.add(next);
             }
         }
 
@@ -51,31 +55,16 @@ public class Main {
 
     }
 
-    private static void union(int a, int b){
-        a = find(a);
-        b = find(b);
-
-        if(a >= b){
-            parents[b] = a;
-        }else{
-            parents[a] = b;
-        }
-    }
-
-    private static int find(int x){
-        if(x == parents[x])
-            return x;
-
-        return find(parents[x]);
-    }
-
-
-    private static class Edge{
-        int a, b, cost;
-        public Edge(int a, int b, int cost){
-            this.a = a;
-            this.b = b;
+    private static class Edge implements Comparable<Edge>{
+        int p, cost;
+        public Edge(int p, int cost){
+            this.p = p;
             this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Edge o) {
+            return this.cost - o.cost;
         }
     }
 }
