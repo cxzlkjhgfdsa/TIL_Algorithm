@@ -1,9 +1,9 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
         String[] input;
@@ -14,33 +14,34 @@ public class Main {
 
         int[] trees = new int[N];
         input = br.readLine().split(" ");
+        int min = 0;
+        int max = 0;  // 나무들의 높이중 가장 높은 값
 
-        for(int i = 0; i < N; i++){
+        for (int i = 0; i < N; i++) {
             trees[i] = Integer.parseInt(input[i]);
+            max = Math.max(max, trees[i]); // 최대높이값 갱신
         }
 
-        Arrays.sort(trees); // 정렬
+        while (min < max) {
 
-        int idx = N-1;
-        int total = 0;
+            int mid = (min + max) / 2;
+            long sum = 0;
 
-
-        for (int i = trees[N-1]-1; i>=0; i--){ // 가장 높이가 높은 나무 - 1 높이부터 자르기 시작
-            while(true){
-                if(idx < 0 || trees[idx] <= i){
-                    idx++;
-                    break;
+            for (int h : trees) {
+                if (h - mid > 0) { // 나무가 잘릴때만 계산
+                    sum += (h - mid);
                 }
-                idx--;
             }
-            //System.out.println(i+" == "+(N-idx) +" idx = " +idx);
-            total += (N-idx);
 
-            if(total>= M){
-                System.out.println(i);
-                break;
+            if (sum < M) {  // 목표수치보다 작다면 자르는 높이를 낮춰야 하므로 max 값 갱신
+                max = mid;
+            } else {  // 그게 아니라면 최적해를 구하기 위해서 min 값 갱신
+                min = mid + 1;
             }
 
         }
+
+        System.out.println(min - 1);
+
     }
 }
