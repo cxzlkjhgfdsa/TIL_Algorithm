@@ -27,7 +27,7 @@ public class Main {
 
         boolean[] visited = new boolean[N];
 
-        int ans = 0;
+        long ans = 0;
 
         while(!que.isEmpty()){
 
@@ -36,7 +36,7 @@ public class Main {
             if(o.idx == N-1)
                 continue;
 
-            int sum = 0;
+            long sum = 0;
 
             for(int i = o.idx+1; i < N; i++){
                 if(visited[i])
