@@ -1,12 +1,11 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         String[] str = sc.next().split("");
-        ArrayList<String> list = new ArrayList<>();
+        Queue<String> que = new ArrayDeque<>();
 
         int zero = 0;
         int one = 0;
@@ -16,33 +15,43 @@ public class Main {
                 zero++;
             else
                 one++;
-            list.add(s);
+            que.add(s);
         }
 
         zero /= 2;
         one /= 2;
 
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).equals("1")){
-                list.remove(i);
+        String temp = "";
+
+        while(!que.isEmpty()){
+
+            String cur = que.poll();
+
+            if(one > 0 && cur.equals("1")){
                 one--;
+                continue;
             }
-            if(one == 0)
-                break;
+
+            temp += cur;
+
         }
 
-        for(int i = list.size() -1; i>= 0; i--){
-            if(list.get(i).equals("0")){
-                list.remove(i);
+        Stack<String> stack = new Stack<>();
+
+        String[] k = temp.split("");
+
+        for(int i = k.length-1; i >=0; i--){
+            if(zero > 0 && k[i].equals("0")){
                 zero--;
+                continue;
             }
-            if(zero == 0)
-                break;
+            stack.add(k[i]);
         }
 
-        String ans ="";
-        for(String next : list){
-            ans+= next;
+        String ans = "";
+
+        while(!stack.isEmpty()){
+            ans += stack.pop();
         }
 
         System.out.println(ans);
