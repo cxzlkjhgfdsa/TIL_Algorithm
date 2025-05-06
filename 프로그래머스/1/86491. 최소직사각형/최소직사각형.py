@@ -1,2 +1,13 @@
 def solution(sizes):
-    return max([max(i) for i in sizes]) * max([min(i) for i in sizes])
+    row = 0
+    col = 0
+    
+    for a, b in sizes:  
+        if a < b:
+            a, b = b, a
+        
+        row = max(row, a)
+        col = max(col, b)
+            
+    
+    return row*col
